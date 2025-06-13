@@ -1,61 +1,36 @@
 import React, { useState, useEffect } from 'react';
 
+import WeatherCard from './components/WeatherCard';
+import SearchInput from './components/SearchInput';
+import StartLoader from './components/Loader'
+
 function App() {
-  const [city, setCity] = useState('');
-  const [weather, setWeather] = useState(null);
+    const [time, setTime] = useState(new Date())
+    const [isLoading, setIsLoading] = useState('hide');
+    const [weatherData, setWeatherData] = useState(null);
+     useEffect(()=>{
+       if(weatherData){
+            console.log(weatherData,"weatherData")
+       }    
+    }, [weatherData])
+    return (
 
-  const API_KEY = "your_api_key"; // 🔁 Replace with your real API key
+        <div className='conatiner'>
+            <StartLoader className={isLoading} />
+            <div className='mb-5'>
+                <div className='text-center'>
+                    <h1 className='topHeader'>Weather Application</h1>
+                </div>
+            </div>
+            <div className='weatherContainer'>
+                <div className='weatherInnerBox'>
+                    <SearchInput setIsLoading={setIsLoading} setWeatherData={setWeatherData}/>
 
-  useEffect(() => {
-  if (city.length < 3) return;
-
-  const timer = setTimeout(() => {
-    const fetchWeather = async () => {
-      try {
-        const res = await fetch(
-          `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric`
-        );
-        const data = await res.json();
-        if (data.cod === 200) {
-          setWeather(data);
-        } else {
-          setWeather(null);
-        }
-      } catch (error) {
-        console.error("Error fetching weather:", error);
-      }
-    };
-
-    fetchWeather();
-  }, 800); // wait 800ms after typing
-
-  return () => clearTimeout(timer);
-}, [city]);
-
-
-  return (
-    <div style={{ padding: "2rem", fontFamily: "Arial" }}>
-      <h1>🌤️ Weather App</h1>
-      <input
-        type="text"
-        value={city}
-        onChange={(e) => setCity(e.target.value)}
-        placeholder="Enter city name"
-        style={{ padding: "0.5rem", fontSize: "16px" }}
-      />
-
-      {weather ? (
-        <div style={{ marginTop: "1rem" }}>
-          <h2>{weather.name}</h2>
-          <p>🌡️ Temp: {weather.main.temp} °C</p>
-          <p>💧 Humidity: {weather.main.humidity}%</p>
-          <p>🌥️ Weather: {weather.weather[0].description}</p>
+                    <WeatherCard weatherData={weatherData}/>
+                </div>
+            </div>
         </div>
-      ) : (
-        city && <p>No data found for "{city}"</p>
-      )}
-    </div>
-  );
+    )
 }
 
 export default App;
