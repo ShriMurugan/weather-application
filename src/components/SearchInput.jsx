@@ -40,7 +40,7 @@ function SearchInput({ setWeatherData, setIsLoading }) {
 
         setIsLoading('active');
         try {
-            const apiKey = "e104d49ca99583ee20fdeeff5088ea6c";
+            const apiKey = "YOUR_API_KEY_HERE"; // Replace with your OpenWeatherMap API key
             const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${inputCity}&appid=${apiKey}&units=metric`);
             const data = await response.json();
 
